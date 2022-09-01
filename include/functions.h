@@ -1,0 +1,1 @@
+int switch_game();

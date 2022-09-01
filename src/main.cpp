@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Arduino_FreeRTOS.h>
+#include "functions.h"
 
 // define two tasks for Blink & AnalogRead
 void TaskBlink( void *pvParameters );
@@ -10,6 +11,9 @@ void setup() {
   
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
+  for (int i = 0; i < 6; i++) {
+    pinMode(i, INPUT);
+  }
   
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB, on LEONARDO, MICRO, YUN, and other 32u4 based boards.
@@ -38,6 +42,8 @@ void setup() {
 void loop()
 {
   // Empty. Things are done in Tasks.
+  switch_game();
+  delay(100);
 }
 
 /*--------------------------------------------------*/
