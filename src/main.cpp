@@ -8,26 +8,42 @@ int task_order[6] = {0, 0, 0, 0, 0, 0};
 int position = 0;
 
 // define two tasks for Blink & AnalogRead
+void TaskSevenSeg(void *pvParameters);
+void TaskTimer(void *pvParameters);
 void TaskWord( void *pvParameters );
 void TaskSwitch( void *pvParameters );
 void TaskBlink( void *pvParameters );
 void TaskAnalogRead( void *pvParameters );
-
-
 
 // the setup function runs once when you press reset or power the board
 void setup() {
   
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
-  for (int i = 0; i < 6; i++) {
-    pinMode(i, INPUT);
-  }
+    sevenSegDisplay.display(true);
+
+    // iterate over every display
+    for (int i = 0; i < seven_seg_count; i++)
+    {
+        pinMode(seven_seg_en[i], OUTPUT);
+        digitalWrite(seven_seg_en[i], HIGH);
+    }
   setup_screen();
   
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB, on LEONARDO, MICRO, YUN, and other 32u4 based boards.
   }
+  Serial.print("Serial intialized. creating tasks...");
+
+      // Now set up two tasks to run independently.
+    xTaskCreate(
+        TaskSevenSeg, "TaskSevenSeg" // A name just for humans
+        ,
+        1024 // This stack size can be checked & adjusted by reading the Stack Highwater
+        ,
+        NULL, 3 // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+        ,
+        NULL);
 
   xTaskCreate(
     TaskWord
