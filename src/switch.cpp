@@ -6,7 +6,7 @@ void setup_sw_led () {
     // generate, save and display led colors
     randomSeed(analogRead(0));
     int r;
-    for (int i = 0; i < 6; i++) { 
+    for (int i = 0; i < LED_COUNT; i++) { 
         r = random(4);
         // si on obtient nombre paire (0 ou 2) c'est soit vert, soit blanc donc il faut que le switch soit en bas
         if(r%2 == 0) {

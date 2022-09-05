@@ -9,7 +9,8 @@
 // Declare our NeoPixel strip object:
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
-int led_color[LED_COUNT][3];
+// the led in the middle is turned on
+int led_color[LED_COUNT] = {0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0};
 // white, red, green, blue
 int color[4][4] = {
                     {255, 255, 255},

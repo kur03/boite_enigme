@@ -5,7 +5,7 @@
 
 // save the task finished order
 int task_order[6] = {0, 0, 0, 0, 0, 0};
-int position = 0;
+int position = 0, counter = 8;
 
 // define two tasks for Blink & AnalogRead
 void TaskSevenSeg(void *pvParameters);
