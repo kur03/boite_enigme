@@ -1,4 +1,4 @@
-#include "variables.h"
+#include "switch_variables.h"
 void setup_sw_led () {
     // set pin
     strip.begin();
@@ -52,4 +52,3 @@ int switch_game() {
 
     return 0;
 }
-

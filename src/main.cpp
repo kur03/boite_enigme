@@ -1,10 +1,19 @@
 #include <Arduino.h>
 #include <Arduino_FreeRTOS.h>
-#include "functions.h"
+#include "fonctions.h"
+
+
+// save the task finished order
+int task_order[6] = {0, 0, 0, 0, 0, 0};
+int position = 0;
 
 // define two tasks for Blink & AnalogRead
+void TaskWord( void *pvParameters );
+void TaskSwitch( void *pvParameters );
 void TaskBlink( void *pvParameters );
 void TaskAnalogRead( void *pvParameters );
+
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -14,10 +23,27 @@ void setup() {
   for (int i = 0; i < 6; i++) {
     pinMode(i, INPUT);
   }
+  setup_screen();
   
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB, on LEONARDO, MICRO, YUN, and other 32u4 based boards.
   }
+
+  xTaskCreate(
+    TaskWord
+    ,  "Word"
+    ,  128  // Stack size
+    ,  NULL
+    ,  4  // Priority
+    ,  NULL );
+
+  xTaskCreate(
+    TaskSwitch
+    ,  "Switch"
+    ,  128  // Stack size
+    ,  NULL
+    ,  3  // Priority
+    ,  NULL );
 
   // Now set up two tasks to run independently.
   xTaskCreate(
@@ -42,13 +68,32 @@ void setup() {
 void loop()
 {
   // Empty. Things are done in Tasks.
-  switch_game();
-  delay(100);
 }
 
 /*--------------------------------------------------*/
 /*---------------------- Tasks ---------------------*/
 /*--------------------------------------------------*/
+
+void TaskSwitch(void *pvParameters)  // This is a task.
+{
+    (void) pvParameters;
+    if (switch_game()) {
+        task_order[position] = 2;
+        position ++;
+        vTaskDelete(NULL);
+    }
+}
+
+void TaskWord(void *pvParameters)  // This is a task.
+{
+    (void) pvParameters;
+    if (word_game()) {
+        task_order[position] = 6;
+        position ++;
+        vTaskDelete(NULL);
+    }
+}
+
 
 void TaskBlink(void *pvParameters)  // This is a task.
 {
